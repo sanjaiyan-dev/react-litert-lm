@@ -49,8 +49,10 @@ export default defineConfig({
   dts: {
     compilerOptions: {
       ignoreDeprecations: "6.0",
+      jsx: "react-jsx",
     },
   },
+  minify: true,
   clean: true,
   sourcemap: true,
   external: ["react", "react-dom", "@litert-lm/core"],
