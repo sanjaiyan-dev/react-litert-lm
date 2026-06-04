@@ -52,7 +52,6 @@ export default defineConfig({
       jsx: "react-jsx",
     },
   },
-  minify: true,
   clean: true,
   sourcemap: true,
   external: ["react", "react-dom", "@litert-lm/core"],
