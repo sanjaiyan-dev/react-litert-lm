@@ -46,6 +46,9 @@ const reactCompilerEsbuildPlugin = {
 export default defineConfig({
   entry: ["src/index.ts"],
   format: ["cjs", "esm"],
+  esbuildOptions(options) {
+    options.jsx = "automatic";
+  },
   dts: {
     compilerOptions: {
       ignoreDeprecations: "6.0",
@@ -57,6 +60,7 @@ export default defineConfig({
   },
   clean: true,
   sourcemap: true,
+  treeshake: true,
   external: ["react", "react-dom", "@litert-lm/core"],
   esbuildPlugins: [reactCompilerEsbuildPlugin],
   banner: {
