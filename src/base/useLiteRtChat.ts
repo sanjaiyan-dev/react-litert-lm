@@ -43,7 +43,6 @@ export const useLiteRtChatNonStream = (props: UseLiteRtChatNonStreamProps) => {
 	) => {
 		startTransition(async () => {
 			const response = await chat.sendMessage(sendMsgProps);
-
 			setResult(response);
 		});
 	};

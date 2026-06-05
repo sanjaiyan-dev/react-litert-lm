@@ -20,7 +20,7 @@ const reactCompilerEsbuildPlugin = {
           [
             ReactCompiler,
             {
-              target: "18",
+              target: "19",
             },
           ],
         ],
