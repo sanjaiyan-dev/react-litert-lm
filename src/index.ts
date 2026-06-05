@@ -1,6 +1,17 @@
 import {
 	LiteRtEngineContext,
 	LiteRtEngineProvider,
-	useLiteRtEngine,
 } from "./base/LiteRtEngineProvider";
-export { LiteRtEngineContext, LiteRtEngineProvider, useLiteRtEngine };
+import {
+	useLiteRtChatConversationInit,
+	useLiteRtChatNonStream,
+} from "./base/useLiteRtChat";
+import { useLiteRtEngine } from "./core/useLiteRtEngine";
+
+export {
+	LiteRtEngineContext,
+	LiteRtEngineProvider,
+	useLiteRtEngine,
+	useLiteRtChatConversationInit,
+	useLiteRtChatNonStream,
+};

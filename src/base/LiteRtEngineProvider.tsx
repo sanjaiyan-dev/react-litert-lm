@@ -1,17 +1,12 @@
-import { Engine } from "@litert-lm/core";
-import {
-	createContext,
-	startTransition,
-	use,
-	useEffect,
-	useState,
-} from "react";
-import type { LiteRtEngineProviderProps } from "../types/base/LiteRtEngineProvider.test";
+import type { Engine } from "@litert-lm/core";
+import { createContext, useContext } from "react";
+import type { LiteRtEngineProviderProps } from "../types/base/LiteRtEngineProvider.types";
+import { useLiteRtEngine } from "../core/useLiteRtEngine";
 
 export const LiteRtEngineContext = createContext<Engine | null>(null);
 
-export const useLiteRtEngine = () => {
-	const engine = use(LiteRtEngineContext);
+export const useLiteRtEngineContext = () => {
+	const engine = useContext(LiteRtEngineContext);
 
 	if (engine === null) {
 		throw new Error(
@@ -24,20 +19,7 @@ export const useLiteRtEngine = () => {
 };
 
 export const LiteRtEngineProvider = (props: LiteRtEngineProviderProps) => {
-	const [initializeEnginePromise, setInitializeEnginePromise] = useState(() =>
-		Engine.create(props, props.inputPromptAsHint),
-	);
-
-	// biome-ignore lint: For optimized dependency tracking, avoid passing objects as dependencies because React only checks references, which can lead to performance bottlenecks.
-	useEffect(() => {
-		startTransition(() => {
-			setInitializeEnginePromise(() =>
-				Engine.create(props, props.inputPromptAsHint),
-			);
-		});
-	}, [props.backend, props.inputPromptAsHint]);
-
-	const liteRtEngine = use(initializeEnginePromise);
+	const liteRtEngine = useLiteRtEngine(props);
 	return (
 		<LiteRtEngineContext.Provider value={liteRtEngine}>
 			{props.children}
