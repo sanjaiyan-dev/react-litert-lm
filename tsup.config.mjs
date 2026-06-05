@@ -50,6 +50,9 @@ export default defineConfig({
     compilerOptions: {
       ignoreDeprecations: "6.0",
       jsx: "react-jsx",
+      target: "ES2022",
+      moduleResolution: "bundler",
+      module: "ESNext",
     },
   },
   clean: true,
