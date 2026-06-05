@@ -21,7 +21,7 @@ export const useLiteRtChatConversationInit = (
 				enableConstrainedDecoding: props.enableConstrainedDecoding,
 			}),
 		[
-			liteRtEngine.createConversation,
+			liteRtEngine,
 			props.preface,
 			props.enableConstrainedDecoding,
 			props.sessionConfig,
