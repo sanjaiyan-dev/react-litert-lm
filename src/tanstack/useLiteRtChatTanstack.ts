@@ -55,7 +55,7 @@ export const useLiteRtChatStreamQuery = (
 	return useQuery({
 		queryKey: [
 			"react-lite-rt",
-			"useLiteRtChatNonStreamTanstackQuery",
+			"useLiteRtChatStreamTanstackQuery",
 			props.message,
 		] as const,
 
