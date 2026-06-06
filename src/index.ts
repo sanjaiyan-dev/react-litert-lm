@@ -5,6 +5,7 @@ import {
 import {
 	useLiteRtChatConversationInit,
 	useLiteRtChatNonStream,
+	useLiteRtChatStream,
 } from "./base/useLiteRtChat";
 import { useLiteRtEngine } from "./core/useLiteRtEngine";
 
@@ -14,4 +15,5 @@ export {
 	useLiteRtEngine,
 	useLiteRtChatConversationInit,
 	useLiteRtChatNonStream,
+	useLiteRtChatStream,
 };

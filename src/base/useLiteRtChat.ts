@@ -1,9 +1,19 @@
-import { use, useMemo, useState, useTransition } from "react";
+import {
+	startTransition,
+	use,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+	useTransition,
+} from "react";
 import { useLiteRtEngineContext } from "./LiteRtEngineProvider";
 import type {
 	UseLiteRtChatConversationInitProps,
 	UseLiteRtChatNonStreamProps,
 	UseLiteRtChatNonStreamSendMessageProps,
+	UseLiteRtChatStreamProps,
+	UseLiteRtChatStreamSendMessageProps,
 } from "../types/base/useLiteRtChat.types";
 import type { Message } from "@litert-lm/core";
 
@@ -35,21 +45,123 @@ export const useLiteRtChatConversationInit = (
 };
 
 export const useLiteRtChatNonStream = (props: UseLiteRtChatNonStreamProps) => {
-	const chat = useLiteRtChatConversationInit(props);
+	const conversation = useLiteRtChatConversationInit(props);
 	const [isPending, startTransition] = useTransition();
 	const [result, setResult] = useState<Message>();
 	const sendMessage = (
 		sendMsgProps: UseLiteRtChatNonStreamSendMessageProps,
 	) => {
 		startTransition(async () => {
-			const response = await chat.sendMessage(sendMsgProps);
-			setResult(response);
+			const response = await conversation.sendMessage(sendMsgProps);
+			startTransition(() => {
+				setResult(response);
+			});
 		});
+	};
+
+	const cancelMessage = () => {
+		conversation.cancel();
 	};
 
 	return {
 		isPending,
 		result,
 		sendMessage,
+		cancelMessage,
+	};
+};
+
+const consumeChatStream = async (
+	streamPromise: Promise<ReadableStream<Message>> | ReadableStream<Message>,
+	callbacks: {
+		onText: (text: string) => void;
+		onError: (err: Error) => void;
+		onDone: () => void;
+		isCancelled: () => boolean;
+	},
+) => {
+	"use memo";
+	try {
+		const stream = await streamPromise;
+
+		for await (const chunk of stream) {
+			if (callbacks.isCancelled()) {
+				break;
+			}
+
+			if (chunk?.content && typeof chunk.content !== "string") {
+				let chunkText = "";
+				for (const item of chunk.content) {
+					if (item.type === "text") {
+						chunkText += item.text;
+					}
+				}
+				if (chunkText) {
+					callbacks.onText(chunkText);
+				}
+			}
+		}
+	} catch (err) {
+		if (!callbacks.isCancelled()) {
+			callbacks.onError(err instanceof Error ? err : new Error(String(err)));
+		}
+	} finally {
+		if (!callbacks.isCancelled()) {
+			callbacks.onDone();
+		}
+	}
+};
+
+export const useLiteRtChatStream = (props: UseLiteRtChatStreamProps) => {
+	"use memo";
+	const conversation = useLiteRtChatConversationInit(props);
+	const [streamingText, setStreamingText] = useState<string>("");
+	const [isStreaming, setIsStreaming] = useState<boolean>(false);
+	const [error, setError] = useState<Error | null>(null);
+
+	const isCancelledRef = useRef<boolean>(false);
+
+	const sendMessage = async (
+		sendMsgProps: UseLiteRtChatStreamSendMessageProps,
+	) => {
+		"use memo";
+		setIsStreaming(true);
+		setError(null);
+		setStreamingText("");
+		isCancelledRef.current = false;
+		const stream = conversation.sendMessageStreaming(sendMsgProps);
+
+		await consumeChatStream(stream, {
+			onText: (chunkText) => {
+				startTransition(() => {
+					setStreamingText((prev) => prev + chunkText);
+				});
+			},
+			onError: (err) => {
+				setError(err);
+			},
+			onDone: () => {
+				setIsStreaming(false);
+			},
+			isCancelled: () => isCancelledRef.current,
+		});
+	};
+
+	const cancelMessage = () => {
+		conversation.cancel();
+	};
+	useEffect(() => {
+		return () => {
+			isCancelledRef.current = true;
+			conversation.cancel();
+		};
+	}, [conversation]);
+
+	return {
+		sendMessage,
+		cancelMessage,
+		streamingText,
+		error,
+		isStreaming,
 	};
 };
