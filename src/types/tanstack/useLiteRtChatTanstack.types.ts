@@ -49,5 +49,5 @@ export interface UseLiteRtChatStreamTanstackProps
 		UseQueryOptions,
 		"queryFn" | "queryKey" | "staleTime" | "gcTime"
 	>;
-	streamQueryOptions?: typeof experimental_streamedQuery;
+	streamQueryOptions?: Omit<typeof experimental_streamedQuery, "streamFn">;
 }
