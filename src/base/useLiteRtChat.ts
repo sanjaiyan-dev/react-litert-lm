@@ -46,14 +46,14 @@ export const useLiteRtChatConversationInit = (
 
 export const useLiteRtChatNonStream = (props: UseLiteRtChatNonStreamProps) => {
 	const conversation = useLiteRtChatConversationInit(props);
-	const [isPending, startTransition] = useTransition();
+	const [isPending, deferUpdate] = useTransition();
 	const [result, setResult] = useState<Message>();
 	const sendMessage = (
 		sendMsgProps: UseLiteRtChatNonStreamSendMessageProps,
 	) => {
-		startTransition(async () => {
+		deferUpdate(async () => {
 			const response = await conversation.sendMessage(sendMsgProps);
-			startTransition(() => {
+			deferUpdate(() => {
 				setResult(response);
 			});
 		});
@@ -62,6 +62,12 @@ export const useLiteRtChatNonStream = (props: UseLiteRtChatNonStreamProps) => {
 	const cancelMessage = () => {
 		conversation.cancel();
 	};
+
+	useEffect(() => {
+		return () => {
+			conversation.cancel();
+		};
+	}, [conversation.cancel]);
 
 	return {
 		isPending,
@@ -159,7 +165,7 @@ export const useLiteRtChatStream = (props: UseLiteRtChatStreamProps) => {
 			isCancelledRef.current = true;
 			conversation.cancel();
 		};
-	}, [conversation]);
+	}, [conversation.cancel]);
 
 	return {
 		sendMessage,
