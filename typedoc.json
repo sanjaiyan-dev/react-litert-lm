@@ -1,0 +1,14 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": [
+        "./src/index.ts",
+        "./src/types/index.types.ts"
+    ],
+    "out": "./docs",
+    "cleanOutputDir": true,
+    "excludePrivate": true,
+    "excludeProtected": false,
+    "compilerOptions": {
+        "jsx": "react-jsx"
+    }
+}
