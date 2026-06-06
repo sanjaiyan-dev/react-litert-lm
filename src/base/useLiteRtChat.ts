@@ -89,7 +89,11 @@ const consumeChatStream = async (
 				break;
 			}
 
-			if (chunk?.content && typeof chunk.content !== "string") {
+			if (typeof chunk?.content === "string") {
+				callbacks.onText(chunk.content);
+			}
+
+			if (Array.isArray(chunk?.content)) {
 				let chunkText = "";
 				for (const item of chunk.content) {
 					if (item.type === "text") {
