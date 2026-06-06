@@ -1,14 +1,16 @@
 {
-    "$schema": "https://typedoc.org/schema.json",
-    "entryPoints": [
-        "./src/index.ts",
-        "./src/types/index.types.ts"
-    ],
-    "out": "./docs",
-    "cleanOutputDir": true,
-    "excludePrivate": true,
-    "excludeProtected": false,
-    "compilerOptions": {
-        "jsx": "react-jsx"
-    }
+	"$schema": "https://typedoc.org/schema.json",
+	"entryPoints": [
+		"./src/index.ts",
+		"./src/types/index.types.ts",
+		"./src/tanstack/index.ts",
+		"./src/types/tanstack/index.types.ts"
+	],
+	"out": "./docs",
+	"cleanOutputDir": true,
+	"excludePrivate": true,
+	"excludeProtected": false,
+	"compilerOptions": {
+		"jsx": "react-jsx"
+	}
 }
