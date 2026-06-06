@@ -1,6 +1,12 @@
 import type { MessageLike } from "@litert-lm/core";
-import type { UseLiteRtChatNonStreamProps } from "../base/useLiteRtChat.types";
-import type { UseQueryOptions } from "@tanstack/react-query";
+import type {
+	UseLiteRtChatNonStreamProps,
+	UseLiteRtChatStreamProps,
+} from "../base/useLiteRtChat.types";
+import type {
+	UseQueryOptions,
+	experimental_streamedQuery,
+} from "@tanstack/react-query";
 export interface CacheConfig {
 	/**
 	 * Time in milliseconds until the data is considered stale.
@@ -33,4 +39,15 @@ export interface UseLiteRtChatNonStreamTanstackProps
 		UseQueryOptions,
 		"queryFn" | "queryKey" | "staleTime" | "gcTime"
 	>;
+}
+
+export interface UseLiteRtChatStreamTanstackProps
+	extends UseLiteRtChatStreamProps {
+	message: MessageLike;
+	cacheConfig?: CacheConfig;
+	useQueryOptions?: Omit<
+		UseQueryOptions,
+		"queryFn" | "queryKey" | "staleTime" | "gcTime"
+	>;
+	streamQueryOptions?: typeof experimental_streamedQuery;
 }

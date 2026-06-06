@@ -1,5 +1,5 @@
-import { LiteRtEngineProviderProps } from "./base/LiteRtEngineProvider.types";
-import {
+import type { LiteRtEngineProviderProps } from "./base/LiteRtEngineProvider.types";
+import type {
 	UseLiteRtChatConversationInitProps,
 	UseLiteRtChatNonStreamProps,
 	UseLiteRtChatNonStreamSendMessageProps,
@@ -7,7 +7,7 @@ import {
 	UseLiteRtChatStreamSendMessageProps,
 } from "./base/useLiteRtChat.types";
 
-export {
+export type {
 	LiteRtEngineProviderProps,
 	UseLiteRtChatConversationInitProps,
 	UseLiteRtChatNonStreamProps,

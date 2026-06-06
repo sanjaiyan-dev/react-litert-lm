@@ -1,6 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import {
+	useQuery,
+	experimental_streamedQuery as streamedQuery,
+} from "@tanstack/react-query";
 import { useLiteRtChatConversationInit } from "../base/useLiteRtChat";
-import type { UseLiteRtChatNonStreamTanstackProps } from "../types/tanstack/useLiteRtChatTanstack.types";
+import type {
+	UseLiteRtChatNonStreamTanstackProps,
+	UseLiteRtChatStreamTanstackProps,
+} from "../types/tanstack/useLiteRtChatTanstack.types";
 
 export const useLiteRtChatConversationTanstackInit =
 	useLiteRtChatConversationInit;
@@ -36,6 +42,27 @@ export const useLiteRtChatNonStreamTanstackQuery = (
 				throw err;
 			}
 		},
+		staleTime: props.cacheConfig?.staleTime ?? 720000,
+		gcTime: props.cacheConfig?.gcTime ?? Infinity,
+		...props.useQueryOptions,
+	});
+};
+
+export const useLiteRtChatStreamQuery = (
+	props: UseLiteRtChatStreamTanstackProps,
+) => {
+	const conversation = useLiteRtChatConversationTanstackInit(props);
+	return useQuery({
+		queryKey: [
+			"react-lite-rt",
+			"useLiteRtChatNonStreamTanstackQuery",
+			props.message,
+		] as const,
+
+		queryFn: streamedQuery({
+			streamFn: () => conversation.sendMessageStreaming(props.message),
+			...props.streamQueryOptions,
+		}),
 		staleTime: props.cacheConfig?.staleTime ?? 720000,
 		gcTime: props.cacheConfig?.gcTime ?? Infinity,
 		...props.useQueryOptions,

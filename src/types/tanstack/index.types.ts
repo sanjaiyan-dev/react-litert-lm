@@ -1,6 +1,11 @@
-import {
+import type {
 	UseLiteRtChatNonStreamTanstackProps,
+	UseLiteRtChatStreamTanstackProps,
 	CacheConfig,
 } from "./useLiteRtChatTanstack.types";
 
-export { UseLiteRtChatNonStreamTanstackProps, CacheConfig };
+export type {
+	UseLiteRtChatNonStreamTanstackProps,
+	UseLiteRtChatStreamTanstackProps,
+	CacheConfig,
+};
