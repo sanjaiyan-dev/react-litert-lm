@@ -28,7 +28,7 @@ export const useLiteRtChatNonStreamTanstackQuery = (
 
 		queryFn: async ({ signal }) => {
 			if (signal.aborted) {
-				throw new DOMException("Query aborted", "AbortError");
+				throw new Error(signal.reason ?? "AbortError");
 			}
 
 			signal.addEventListener("abort", onAbort);
@@ -44,7 +44,6 @@ export const useLiteRtChatNonStreamTanstackQuery = (
 		},
 		staleTime: props.cacheConfig?.staleTime ?? 720000,
 		gcTime: props.cacheConfig?.gcTime ?? Infinity,
-		...props.useQueryOptions,
 	});
 };
 
@@ -61,10 +60,8 @@ export const useLiteRtChatStreamTanstackQuery = (
 
 		queryFn: streamedQuery({
 			streamFn: () => conversation.sendMessageStreaming(props.message),
-			...props.streamQueryOptions,
 		}),
 		staleTime: props.cacheConfig?.staleTime ?? 720000,
 		gcTime: props.cacheConfig?.gcTime ?? Infinity,
-		...props.useQueryOptions,
 	});
 };

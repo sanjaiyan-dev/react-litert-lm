@@ -3,4 +3,7 @@ import {
 	useLiteRtChatStreamTanstackQuery,
 } from "./useLiteRtChatTanstack";
 
-export { useLiteRtChatNonStreamTanstackQuery, useLiteRtChatStreamTanstackQuery as useLiteRtChatStreamQuery };
+export {
+	useLiteRtChatNonStreamTanstackQuery,
+	useLiteRtChatStreamTanstackQuery,
+};
