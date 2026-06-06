@@ -48,7 +48,7 @@ export const useLiteRtChatNonStreamTanstackQuery = (
 	});
 };
 
-export const useLiteRtChatStreamQuery = (
+export const useLiteRtChatStreamTanstackQuery = (
 	props: UseLiteRtChatStreamTanstackProps,
 ) => {
 	const conversation = useLiteRtChatConversationTanstackInit(props);

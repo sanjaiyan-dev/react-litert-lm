@@ -1,6 +1,6 @@
 import {
 	useLiteRtChatNonStreamTanstackQuery,
-	useLiteRtChatStreamQuery,
+	useLiteRtChatStreamTanstackQuery,
 } from "./useLiteRtChatTanstack";
 
-export { useLiteRtChatNonStreamTanstackQuery, useLiteRtChatStreamQuery };
+export { useLiteRtChatNonStreamTanstackQuery, useLiteRtChatStreamTanstackQuery as useLiteRtChatStreamQuery };
