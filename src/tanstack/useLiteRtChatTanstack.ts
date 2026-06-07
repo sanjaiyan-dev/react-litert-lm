@@ -7,6 +7,7 @@ import type {
 	UseLiteRtChatNonStreamTanstackProps,
 	UseLiteRtChatStreamTanstackProps,
 } from "../types/tanstack/useLiteRtChatTanstack.types";
+import { useDeferredValue } from "react";
 
 export const useLiteRtChatConversationTanstackInit =
 	useLiteRtChatConversationInit;
@@ -19,11 +20,13 @@ export const useLiteRtChatNonStreamTanstackQuery = (
 		conversation.cancel();
 	};
 
+	const deferedMessage = useDeferredValue(props.message);
+
 	return useQuery({
 		queryKey: [
 			"react-lite-rt",
 			"useLiteRtChatNonStreamTanstackQuery",
-			props.message,
+			deferedMessage,
 		] as const,
 
 		queryFn: async ({ signal }) => {
@@ -34,7 +37,7 @@ export const useLiteRtChatNonStreamTanstackQuery = (
 			signal.addEventListener("abort", onAbort);
 
 			try {
-				const response = await conversation.sendMessage(props.message);
+				const response = await conversation.sendMessage(deferedMessage);
 				signal.removeEventListener("abort", onAbort);
 				return response;
 			} catch (err) {
@@ -44,11 +47,9 @@ export const useLiteRtChatNonStreamTanstackQuery = (
 		},
 		staleTime: props.cacheConfig?.staleTime ?? 720000,
 		gcTime: props.cacheConfig?.gcTime ?? Infinity,
-		enabled: props.useQueryOptions?.enabled,
+		enabled: Boolean(props.useQueryOptions?.enabled),
 		retry: props.useQueryOptions?.retry,
-		initialData: props.useQueryOptions?.initialData,
 		networkMode: props.useQueryOptions?.networkMode,
-		select: props.useQueryOptions?.select,
 		experimental_prefetchInRender:
 			props.useQueryOptions?.experimental_prefetchInRender,
 	});
@@ -58,23 +59,23 @@ export const useLiteRtChatStreamTanstackQuery = (
 	props: UseLiteRtChatStreamTanstackProps,
 ) => {
 	const conversation = useLiteRtChatConversationTanstackInit(props);
+	const deferedMessage = useDeferredValue(props.message);
+
 	return useQuery({
 		queryKey: [
 			"react-lite-rt",
 			"useLiteRtChatStreamTanstackQuery",
-			props.message,
+			deferedMessage,
 		] as const,
 
 		queryFn: streamedQuery({
-			streamFn: () => conversation.sendMessageStreaming(props.message),
+			streamFn: () => conversation.sendMessageStreaming(deferedMessage),
 		}),
 		staleTime: props.cacheConfig?.staleTime ?? 720000,
 		gcTime: props.cacheConfig?.gcTime ?? Infinity,
-		enabled: props.useQueryOptions?.enabled,
+		enabled: Boolean(props.useQueryOptions?.enabled),
 		retry: props.useQueryOptions?.retry,
-		initialData: props.useQueryOptions?.initialData,
 		networkMode: props.useQueryOptions?.networkMode,
-		select: props.useQueryOptions?.select,
 		experimental_prefetchInRender:
 			props.useQueryOptions?.experimental_prefetchInRender,
 	});
