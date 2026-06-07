@@ -44,6 +44,13 @@ export const useLiteRtChatNonStreamTanstackQuery = (
 		},
 		staleTime: props.cacheConfig?.staleTime ?? 720000,
 		gcTime: props.cacheConfig?.gcTime ?? Infinity,
+		enabled: props.useQueryOptions?.enabled,
+		retry: props.useQueryOptions?.retry,
+		initialData: props.useQueryOptions?.initialData,
+		networkMode: props.useQueryOptions?.networkMode,
+		select: props.useQueryOptions?.select,
+		experimental_prefetchInRender:
+			props.useQueryOptions?.experimental_prefetchInRender,
 	});
 };
 
@@ -63,5 +70,12 @@ export const useLiteRtChatStreamTanstackQuery = (
 		}),
 		staleTime: props.cacheConfig?.staleTime ?? 720000,
 		gcTime: props.cacheConfig?.gcTime ?? Infinity,
+		enabled: props.useQueryOptions?.enabled,
+		retry: props.useQueryOptions?.retry,
+		initialData: props.useQueryOptions?.initialData,
+		networkMode: props.useQueryOptions?.networkMode,
+		select: props.useQueryOptions?.select,
+		experimental_prefetchInRender:
+			props.useQueryOptions?.experimental_prefetchInRender,
 	});
 };
